@@ -1,5 +1,7 @@
 package main;
 
+import java.util.LinkedList;
+
 public class Sensor {
 
 	private int letzterWert;
@@ -13,7 +15,32 @@ public class Sensor {
 	private String upAgain = "";
 	private int counter = 0;
 	private int toleranz;
+	private LinkedList<Integer> lastTen = new LinkedList<Integer>();
 	
+	public boolean isLastTenToBig(int actualValue){
+		lastTen.add(actualValue);
+
+		if(lastTen.size() > 9){
+			lastTen.removeFirst();
+		}
+		
+		for(Integer valueFromLastTen: lastTen){
+			if(((actualValue - toleranz) > valueFromLastTen) || ((actualValue + toleranz) < valueFromLastTen)){
+				System.out.println("aktueller Wert: " + actualValue + ", Toleranz: " + toleranz + ", oldValue: " + valueFromLastTen);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public LinkedList<Integer> getLastTen() {
+		return lastTen;
+	}
+
+	public void setLastTen(LinkedList<Integer> lastTen) {
+		this.lastTen = lastTen;
+	}
+
 	public Sensor(String name, int toleranz){
 		this.name = name;
 		this.toleranz = toleranz;
